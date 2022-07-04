@@ -55,8 +55,10 @@ const byte graph_y[6] = {0, 0,  0,  32, 32, 32};//each chanel display offset
 byte line_xbuf[17];//Buffer for drawing lines
 byte line_ybuf[17];//Buffer for drawing lines
 
-const byte x16[16] = {15,  21, 26, 29, 30, 29, 26, 21, 15, 9,  4,  1,  0,  1,  4,  9};//Vertex coordinates
-const byte y16[16] = {0,  1,  4,  9,  15, 21, 26, 29, 30, 29, 26, 21, 15, 9,  4,  1};//Vertex coordinates
+// OLD BYTES const byte x16[16] = {15,  21, 26, 29, 30, 29, 26, 21, 15, 9,  4,  1,  0,  1,  4,  9};//Vertex coordinates
+// OLD BYTES const byte y16[16] = {0,  1,  4,  9,  15, 21, 26, 29, 30, 29, 26, 21, 15, 9,  4,  1};//Vertex coordinates
+const byte x16[16] = {64, 74, 81, 86, 88, 86, 81, 74, 64, 54, 47, 42, 40, 42, 47, 54};//Vertex coordinates
+const byte y16[16] = {8,  10,  15,  22,  32, 42, 49, 54, 56, 54, 49, 42, 32, 22, 15,  10};//Vertex coordinates
 
 bool offset_buf[6][16];//offset buffer , Stores the offset result
 byte playing_step[6] = {0, 0, 0, 0, 0, 0}; //playing step number , CH1,2,3,4,5,6
@@ -126,8 +128,8 @@ void channelProcess(int select_ch) {
   buf_count = 0;
    for (m = 0; m < 16; m++) {
      if (offset_buf[k][m] == 1) {
-       line_xbuf[buf_count] = x16[m] + graph_x[k];//store active step
-       line_ybuf[buf_count] = y16[m] + graph_y[k];
+       line_xbuf[buf_count] = x16[m];// + graph_x[k];//store active step
+       line_ybuf[buf_count] = y16[m];// + graph_y[k];
        buf_count++;
      }
    }
@@ -139,7 +141,7 @@ void channelProcess(int select_ch) {
    
    buf_count = 0;
    if (hits[k] == 1) {
-     display.drawLine(15 + graph_x[k], 15 + graph_y[k], x16[offset[k]] + graph_x[k], y16[offset[k]] + graph_y[k], WHITE);
+     display.drawLine(15, 15, x16[offset[k]], y16[offset[k]], WHITE);
    }
 }
 
@@ -194,7 +196,6 @@ void setup() {
  display.setTextSize(1);
  display.setTextColor(WHITE);
  
-
 }
 
 
@@ -205,14 +206,14 @@ void drawCircle() {
    display.print(k + 1);
    
    for (j = 0; j <= limit[k] - 1; j++) { // j = steps
-     display.drawPixel(x16[j] + graph_x[k], y16[j] + graph_y[k], WHITE);
+     display.drawPixel(x16[j], y16[j], WHITE);
    }
  
    if (offset_buf[k][playing_step[k]] == 0) {
-     display.drawCircle(x16[playing_step[k]] + graph_x[k], y16[playing_step[k]] + graph_y[k], 2, WHITE);
+     display.drawCircle(x16[playing_step[k]], y16[playing_step[k]], 2, WHITE);
    }
    if (offset_buf[k][playing_step[k]] == 1) {
-     display.fillCircle(x16[playing_step[k]] + graph_x[k], y16[playing_step[k]] + graph_y[k], 3, WHITE);
+     display.fillCircle(x16[playing_step[k]], y16[playing_step[k]], 3, WHITE);
    }
    
    switch (select_ch) {
