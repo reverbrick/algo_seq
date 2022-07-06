@@ -7,7 +7,7 @@ TO DO list:
 - usunac zegar
 - ustawić do porządku rotary encoder
 
-### Board
+### Board: DOIT ESP32 DEVKIT V1
 
 ![missing image](https://raw.githubusercontent.com/reverbrick/algo_seq/main/docs/espPinout.png)
 
