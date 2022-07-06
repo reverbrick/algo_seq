@@ -2,10 +2,10 @@
 # Sequencer
 
 TO DO list:
-- podpiąć Step limiter
-- zrobić note
-- usunac zegar
-- ustawić do porządku rotary encoder
+- create step limiter feature
+- create note feature
+- delete external clock
+- fix rotary encoder
 
 ### Board: DOIT ESP32 DEVKIT V1
 
