@@ -6,26 +6,19 @@
 #include <Adafruit_SH1106.h>
 #include <define_pins.h>
 
-Adafruit_SH1106 display(OLED_SDA, OLED_SCL);
-
 // External clock
-bool trg_in = 0;//external trigger in H=1,L=0
+bool trg_in = 0; //external trigger in H=1,L=0
 bool old_trg_in = 0;
-unsigned long gate_timer = 0;//countermeasure of sw chattering
+unsigned long gate_timer = 0; //countermeasure of sw chattering
 
 // Initialize Rotary Encoder
-uint16_t buttonCounter = 0;
-RotaryEncoder encoder(PIN_A, PIN_B, BUTTON);
 int oldPosition  = -999;
 int newPosition = -999;
 int i = 0;
-#define ROTARYMIN 0
-#define ROTARYMAX sizeof(y16)
+#define ROTARYMIN 0 // Rotary min range
+#define ROTARYMAX sizeof(y16) // Rotary max range
 
-//push button encoder
-bool sw[6] = {0, 0, 0, 0, 0, 0};//push button
-
-//Sequence variable
+// Sequence variable
 byte j = 0;
 byte k = 0;
 byte m = 0;
@@ -33,25 +26,37 @@ byte buf_count = 0;
 byte line_xbuf[17];//Buffer for drawing lines
 byte line_ybuf[17];//Buffer for drawing lines
 
+// Each circle X, Y coordinates
 const byte x16[16] = {74, 84, 91, 96, 98, 96, 91, 84, 74, 64, 57, 52, 50, 52, 57, 64};//Vertex coordinates
 const byte y16[16] = {8,  10,  15,  22,  32, 42, 49, 54, 56, 54, 49, 42, 32, 22, 15,  10};//Vertex coordinates
 
-bool offset_buf[6][16];//offset buffer , Stores the offset result
+// Global variables store
 byte playing_step[6] = {0, 0, 0, 0, 0, 0}; //playing step number , CH1,2,3,4,5,6
-byte limit[6] = {16, 16, 16, 16, 16, 16};//eache channel max step
-
-byte select_ch = 0; //0~5 = each channel -1 , 6 = random mode
-
 bool mute[6] = {0, 0, 0, 0, 0, 0}; //mute 0 = off , 1 = on
+uint16_t buttonCounter = 0;
+int newButtonVal = 0;
+int oldButtonVal = 0;
+int currentMenuPos = 0;
 
+// Each channel param
+byte hits[6] = { 4, 4, 5, 3, 2, 16};//each channel hits
+byte offset[6] = { 0, 2, 0, 8, 3, 9};//each channele step offset
+
+// Initializations
+Adafruit_SH1106 display(OLED_SDA, OLED_SCL);
+RotaryEncoder encoder(PIN_A, PIN_B, BUTTON);
+
+bool offset_buf[6][16];//offset buffer , Stores the offset result
+byte limit[6] = {16, 16, 16, 16, 16, 16};//eache channel max step
+byte select_ch = 0; //0~5 = each channel -1 , 6 = random mode
 byte bar_now = 1;//count 16 steps, the bar will increase by 1.
 byte bar_max[4] = {2, 4, 8, 16} ;//selectable bar
 byte bar_select = 1;//selected bar
 byte step_cnt = 0;//count 16 steps, the bar will increase by 1.
-
 bool disp_reflesh = 1;//0=not reflesh display , 1= reflesh display , countermeasure of display reflesh bussy
 
-const static byte euc16[17][16] PROGMEM = {//euclidian rythm
+// Euclidian rythm
+const static byte euc16[17][16] PROGMEM = {
  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
  {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
  {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
@@ -70,14 +75,6 @@ const static byte euc16[17][16] PROGMEM = {//euclidian rythm
  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
-
-//each channel param
-byte hits[6] = { 4, 4, 5, 3, 2, 16};//each channel hits
-byte offset[6] = { 0, 2, 0, 8, 3, 9};//each channele step offset
-
-int newButtonVal = 0;
-int oldButtonVal = 0;
-int currentMenuPos = 0;
 
 void selectChannel(int channel){
     if (channel == select_ch){
