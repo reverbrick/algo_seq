@@ -6,6 +6,7 @@ TO DO list:
 - create note feature
 - delete external clock
 - fix rotary encoder
+- Connect MIDI
 
 ### Board: DOIT ESP32 DEVKIT V1
 
