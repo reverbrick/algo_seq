@@ -1,32 +1,14 @@
 #include <Arduino.h>
 #define  ENCODER_OPTIMIZE_INTERRUPTS //countermeasure of encoder noise
 #include <RotaryEncoder.h>
-#include<Wire.h>
-#include<Adafruit_GFX.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
 #include <Adafruit_SH1106.h>
+#include <define_pins.h>
 
-// Encoder Pinout
-#define PIN_A 35
-#define PIN_B 34
-#define BUTTON 32
-
-// Display
-#define OLED_SDA 25
-#define OLED_SCL 26
-#define i2c_Address 0x3c
-Adafruit_SH1106 display(25, 26);
-
-// Buttons Pinout
-#define BUTTON1 15 
-#define BUTTON2 13
-#define BUTTON3 4
-#define BUTTON4 5
-
-// Leds Pinout
-int LED[4] = {18, 19, 21, 22};
+Adafruit_SH1106 display(OLED_SDA, OLED_SCL);
 
 // External clock
-#define CLOCK_IN 23
 bool trg_in = 0;//external trigger in H=1,L=0
 bool old_trg_in = 0;
 unsigned long gate_timer = 0;//countermeasure of sw chattering
@@ -52,7 +34,6 @@ byte line_xbuf[17];//Buffer for drawing lines
 byte line_ybuf[17];//Buffer for drawing lines
 
 const byte x16[16] = {74, 84, 91, 96, 98, 96, 91, 84, 74, 64, 57, 52, 50, 52, 57, 64};//Vertex coordinates
-//const byte x16[16] = {64, 74, 81, 86, 88, 86, 81, 74, 64, 54, 47, 42, 40, 42, 47, 54};//Vertex coordinates
 const byte y16[16] = {8,  10,  15,  22,  32, 42, 49, 54, 56, 54, 49, 42, 32, 22, 15,  10};//Vertex coordinates
 
 bool offset_buf[6][16];//offset buffer , Stores the offset result
@@ -97,6 +78,7 @@ byte offset[6] = { 0, 2, 0, 8, 3, 9};//each channele step offset
 int newButtonVal = 0;
 int oldButtonVal = 0;
 int currentMenuPos = 0;
+
 void selectChannel(int channel){
     if (channel == select_ch){
       mute[channel] = !mute[channel];
