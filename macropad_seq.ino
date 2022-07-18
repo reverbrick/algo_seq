@@ -43,8 +43,8 @@ void drawMenu(){
         ROTARYMIN = 0;
         ROTARYMAX = 16;
         if (newPosition <= ROTARYMIN) {
-          encoder.setPosition(ROTARYMIN);
-          newPosition = ROTARYMIN;
+          encoder.setPosition(preset[0][select_ch]);
+          newPosition = preset[0][select_ch];
         
         } else if (newPosition >= ROTARYMAX) {
           encoder.setPosition(ROTARYMAX);
@@ -464,8 +464,8 @@ void loop() {
       }
 
       pixels.show();
-      //j++;
+      j++;
       //long int t2 = millis();
+      display.clearDisplay();
     }
-    display.clearDisplay();
 }
