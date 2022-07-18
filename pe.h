@@ -178,9 +178,10 @@ const static byte euc16[17][16] PROGMEM = {
 };
 
 char const *menus[5][5] = {
-  {"STEP", "OFFSET", "NOTE", "LIMIT", "RANDOM"},
-  {"CHAN", "NOTE", "GATE", "VELO", "???"},
-  {"BPM", "SIGN", "SYNC", "SWING", "???" }
+  {"STEP", "OFFSET", "NOTE", "LIMIT", "BPM"},
+  {"CHAN", "GATE", "VELO", "SYNC", "SIGN"},
+  {"SWING", "EMPTY", "EMPTY", "EMPTY", "EMPTY"},
+  {"EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"}
 };
 
 bool trg_in = 0; //external trigger in H=1,L=0
@@ -202,16 +203,27 @@ byte line_ybuf[17];//Buffer for drawing lines
 
 // Global variables store
 byte playing_step[8] = {0, 0, 0, 0, 0, 0, 0, 0}; //playing step number , CH1,2,3,4,5,6
-bool mute[8] = {1, 0, 0, 0, 0, 0, 0, 0}; //mute 0 = off , 1 = on
 int newButtonVal = 0;
 int oldButtonVal = 0;
 int currentMenuPos = 0;
+int current_page = 0;
+int j = 0;
+
+int preset[5][8] ={
+  {4, 4, 5, 3, 2, 16, 1, 3},        // each channel hits
+  {0, 2, 0, 8, 3, 9, 2 ,2},         // each channele step offset
+  {16, 16, 16, 16, 16, 16, 16, 16}, // eache channel max step
+  {48, 48, 48, 48, 48, 48, 48, 48}, // each channel default note
+  {1, 0, 0, 0, 0, 0, 0, 0}          // each channel mute 0 = off , 1 = on
+};
+
 
 // Each channel param
-byte hits[8] = {4, 4, 5, 3, 2, 16, 1, 3};//each channel hits
-byte offset[8] = {0, 2, 0, 8, 3, 9, 2 ,2};//each channele step offset
-byte limit[8] = {16, 16, 16, 16, 16, 16, 16, 16};//eache channel max step
-byte notes[8] = {48, 48, 48, 48, 48, 48, 48, 48};
+//hyte hits[8] = {4, 4, 5, 3, 2, 16, 1, 3};//each channel hits
+//byte offset[8] = {0, 2, 0, 8, 3, 9, 2 ,2};//each channele step offset
+//byte limit[8] = {16, 16, 16, 16, 16, 16, 16, 16};//eache channel max step
+//byte notes[8] = {48, 48, 48, 48, 48, 48, 48, 48};
+//byte mute[8] = {1, 0, 0, 0, 0, 0, 0, 0}; //mute 0 = off , 1 = on
 
 bool offset_buf[8][16];//offset buffer , Stores the offset result
 byte select_ch = 0; //0~5 = each channel -1 , 6 = random mode
