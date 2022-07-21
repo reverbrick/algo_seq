@@ -6,7 +6,7 @@
    * preset[2] - limit
    * preset[3] - notes
    * preset[4] - mute
-*/
+*/ 
 
 void selectChannel(int channel){
     if (channel == select_ch){

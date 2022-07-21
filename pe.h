@@ -209,12 +209,15 @@ int currentMenuPos = 0;
 int current_page = 0;
 int j = 0;
 
-int preset[5][8] ={
-  {4, 4, 5, 3, 2, 16, 1, 3},        // each channel hits
-  {0, 2, 0, 8, 3, 9, 2 ,2},         // each channele step offset
-  {16, 16, 16, 16, 16, 16, 16, 16}, // eache channel max step
-  {48, 48, 48, 48, 48, 48, 48, 48}, // each channel default note
-  {1, 0, 0, 0, 0, 0, 0, 0}          // each channel mute 0 = off , 1 = on
+int preset[8][8] ={
+  {4, 4, 5, 3, 2, 16, 1, 3},                        // each channel hits
+  {0, 2, 0, 8, 3, 9, 2 ,2},                         // each channele step offset
+  {16, 16, 16, 16, 16, 16, 16, 16},                 // each channel max step
+  {48, 48, 48, 48, 48, 48, 48, 48},                 // each channel default note
+  {1, 0, 0, 0, 0, 0, 0, 0},                         // each channel mute 0 = off , 1 = on
+  {10, 10, 10, 10, 10, 10, 10, 10},                 // each channel gate timer
+  {1, 2, 3, 4, 5, 6, 7, 8},                         // midi channel
+  {127, 127, 127, 127, 127, 127, 127, 127}          // each channel velocity
 };
 
 
